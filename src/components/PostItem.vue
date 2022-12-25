@@ -12,12 +12,7 @@
 </template>
 
 <script>
-import CustomButton from '@/components/UI/CustomButton.vue';
-
 export default {
-  components: {
-    CustomButton
-  },
   props: {
     post: { type: Object, required: true },
   },

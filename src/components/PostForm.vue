@@ -2,18 +2,15 @@
   <form class="form" @submit.prevent>
     <h2 class="title">Add post</h2>
 
-    <input
+    <custom-input
       type="text"
       placeholder="Post title"
-      class="form__input"
-      v-bind:value="post.title"
-      @input="post.title = $event.target.value"
+      v-model="post.title"
     />
 
-    <input
+    <custom-input
       type="text"
       placeholder="Post description"
-      class="form__input"
       v-model="post.body"
     />
 
@@ -22,12 +19,7 @@
 </template>
 
 <script>
-import CustomButton from "@/components/UI/CustomButton.vue";
-
 export default {
-  components: {
-    CustomButton,
-  },
   data() {
     return {
       post: {
@@ -60,11 +52,5 @@ export default {
   gap: 12px;
   max-width: 320px;
   margin: 0 auto 24px;
-}
-
-.form__input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid teal;
 }
 </style>
