@@ -1,10 +1,19 @@
 <template>
   <div class="container">
-    <h1 class="title">The page with some posts</h1>
+    <div class="pagePosts">
+      <h1 class="pagePosts__title">The page with some posts</h1>
+      <div class="pagePosts__button">
+        <custom-button @click="showModal">Add new post</custom-button>
+      </div>
 
-    <post-form @addPost="addPost"/>
-    <post-list v-bind:posts="posts"/>
+      <custom-modal v-model:show="isModalVisible">
+        <post-form @create="createPost" />
+      </custom-modal>
 
+      <div class="pagePosts__list">
+        <post-list v-bind:posts="posts" @remove="removePost" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,13 +33,21 @@ export default {
         { id: 3, title: "JavaScript", body: "About JavaScript" },
         { id: 4, title: "VueJS", body: "About VueJS" },
       ],
+      isModalVisible: false,
     };
   },
 
   methods: {
-    addPost(post) {
-      this.posts.push(post)
-    }
+    createPost(post) {
+      this.posts.push(post);
+      this.isModalVisible = false;
+    },
+    removePost(post) {
+      this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    showModal() {
+      this.isModalVisible = true;
+    },
   },
 };
 </script>
@@ -53,12 +70,13 @@ html {
   margin: 0 auto;
 }
 
-.title {
+.pagePosts__title {
   margin: 16px;
   text-align: center;
 }
 
-.blockTitle {
-  text-align: center;
+.pagePosts__button {
+  width: 300px;
+  margin: 0 auto 20px;
 }
 </style>

@@ -2,11 +2,11 @@
   <div class="post">
     <div>
       <div class="post__title"><strong>Title:</strong> {{ post.title }}</div>
-      <div class="post__body"><strong>body:</strong> {{ post.body }}</div>
+      <div class="post__body"><strong>Description:</strong> {{ post.body }}</div>
     </div>
 
     <div>
-      <custom-button>Delete</custom-button>
+      <custom-button @click="$emit('remove', post)">Delete</custom-button>
     </div>
   </div>
 </template>

@@ -14,6 +14,9 @@ export default {
 .button {
   width: 100%;
   padding: 12px;
+
+  text-transform: uppercase;
+
   border: 1px solid teal;
   color: white;
   background: teal;
@@ -23,7 +26,7 @@ export default {
 
 .button:hover,
 .button:focus {
-  color: black;
-  background: cyan;
+  background: #00a5a5;
+  border-color: #00a5a5;
 }
 </style>
