@@ -8,8 +8,8 @@
     />
   </div>
 
-  <div v-else>
-    <h2 class="posts__hint">There is no any post</h2>
+  <div class="posts__hint" v-else>
+    <h2>There is no any post</h2>
   </div>
 </template>
 
@@ -34,6 +34,7 @@ export default {
 }
 
 .posts__hint {
+  margin-top: 60px;
   text-align: center;
   color: red;
 }

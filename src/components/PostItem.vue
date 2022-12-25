@@ -2,7 +2,9 @@
   <div class="post">
     <div>
       <div class="post__title"><strong>Title:</strong> {{ post.title }}</div>
-      <div class="post__body"><strong>Description:</strong> {{ post.body }}</div>
+      <div class="post__body">
+        <strong>Description:</strong> {{ post.body }}
+      </div>
     </div>
 
     <div>
@@ -24,6 +26,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  
   width: 100%;
   border: 4px double teal;
   padding: 16px;

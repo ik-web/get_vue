@@ -11,7 +11,12 @@
       </custom-modal>
 
       <div class="pagePosts__list">
-        <post-list v-bind:posts="posts" @remove="removePost" />
+        <post-list
+          v-bind:posts="posts"
+          @remove="removePost"
+          v-if="!isPostsLoading"
+        />
+        <custom-loader v-else />
       </div>
     </div>
   </div>
@@ -20,6 +25,8 @@
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
+import axios from "axios";
+
 export default {
   components: {
     PostForm,
@@ -27,13 +34,9 @@ export default {
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: "HTML", body: "About HTML" },
-        { id: 2, title: "CSS", body: "About CSS" },
-        { id: 3, title: "JavaScript", body: "About JavaScript" },
-        { id: 4, title: "VueJS", body: "About VueJS" },
-      ],
+      posts: [],
       isModalVisible: false,
+      isPostsLoading: false,
     };
   },
 
@@ -48,6 +51,22 @@ export default {
     showModal() {
       this.isModalVisible = true;
     },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
+        this.posts = response.data;
+      } catch (error) {
+        alert(error);
+      } finally {
+        this.isPostsLoading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
   },
 };
 </script>
