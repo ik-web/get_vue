@@ -7,6 +7,10 @@
           <custom-button @click="showModal">Add new post</custom-button>
         </div>
 
+        <div class="pagePosts__searchField">
+          <custom-input v-model="searchQuery" placeholder="Search a post..."/>
+        </div>
+
         <div class="pagePosts__select">
           <custom-select
             v-model="selectedSort"
@@ -23,7 +27,7 @@
       <TransitionGroup name="pagePosts__list" tag="div">
         <custom-loader v-if="isPostsLoading" />
         <post-list 
-          v-bind:posts="sortedPosts" 
+          v-bind:posts="SortedAndSearchedPosts" 
           @remove="removePost" 
           v-else
         />
@@ -48,6 +52,7 @@ export default {
       isModalVisible: false,
       isPostsLoading: true,
       selectedSort: "",
+      searchQuery: "",
       sortOptions: [
         { name: "By title", value: "title" },
         { name: "By description", value: "body" },
@@ -65,6 +70,12 @@ export default {
         a[this.selectedSort]?.localeCompare(b[this.selectedSort])
       );
     },
+    SortedAndSearchedPosts() {
+      return this.sortedPosts
+      .filter(post => (
+        post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      ));
+    }
   },
   methods: {
     createPost(post) {
@@ -121,6 +132,7 @@ html {
 }
 
 .pagePosts__select,
+.pagePosts__searchField,
 .pagePosts__button {
   width: 200px;
 }

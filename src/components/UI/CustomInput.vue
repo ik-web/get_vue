@@ -19,7 +19,14 @@ export default {
 <style scoped>
 .input {
   width: 100%;
-  padding: 12px;
+  height: 40px;
+  padding: 0 12px;
   border: 1px solid teal;
+}
+
+.input::placeholder {
+  font-size: 16px;
+  font-style: italic;
+  color: #c2c2c2;
 }
 </style>
