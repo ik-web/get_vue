@@ -2,8 +2,18 @@
   <div class="container">
     <div class="pagePosts">
       <h1 class="pagePosts__title">The page with some posts</h1>
-      <div class="pagePosts__button">
-        <custom-button @click="showModal">Add new post</custom-button>
+      <div class="pagePosts__top">
+        <div class="pagePosts__button">
+          <custom-button @click="showModal">Add new post</custom-button>
+        </div>
+
+        <div class="pagePosts__select">
+          <custom-select
+            v-model="selectedSort"
+            defaultOptionName="Select a sort method"
+            :options="sortOptions"
+          />
+        </div>
       </div>
 
       <custom-modal v-model:show="isModalVisible">
@@ -11,12 +21,8 @@
       </custom-modal>
 
       <div class="pagePosts__list">
-        <post-list
-          v-bind:posts="posts"
-          @remove="removePost"
-          v-if="!isPostsLoading"
-        />
-        <custom-loader v-else />
+        <custom-loader v-if="isPostsLoading" />
+        <post-list v-bind:posts="sortedPosts" @remove="removePost" v-else />
       </div>
     </div>
   </div>
@@ -37,9 +43,25 @@ export default {
       posts: [],
       isModalVisible: false,
       isPostsLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        { name: "By title", value: "title" },
+        { name: "By description", value: "body" },
+      ],
     };
   },
-
+  // watch: {
+  //   selectedSort(newValue) {
+  //     this.posts.sort((a,b)=> a[newValue]?.localeCompare(b[newValue]))
+  //   }
+  // },
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((a, b) =>
+        a[this.selectedSort]?.localeCompare(b[this.selectedSort])
+      );
+    },
+  },
   methods: {
     createPost(post) {
       this.posts.push(post);
@@ -94,8 +116,17 @@ html {
   text-align: center;
 }
 
+.pagePosts__select,
 .pagePosts__button {
-  width: 300px;
-  margin: 0 auto 20px;
+  width: 200px;
+}
+
+.pagePosts__top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  margin-bottom: 20px;
 }
 </style>

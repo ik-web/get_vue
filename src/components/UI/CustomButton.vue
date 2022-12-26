@@ -13,7 +13,8 @@ export default {
 <style scoped>
 .button {
   width: 100%;
-  padding: 12px;
+  height: 40px;
+  padding: 0 12px;
 
   text-transform: uppercase;
 

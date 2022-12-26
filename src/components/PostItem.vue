@@ -29,6 +29,8 @@ export default {
   gap: 12px;
   
   width: 100%;
+
+  background: white;
   border: 4px double teal;
   padding: 16px;
 }
