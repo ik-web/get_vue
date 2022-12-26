@@ -20,10 +20,14 @@
         <post-form @create="createPost" />
       </custom-modal>
 
-      <div class="pagePosts__list">
+      <TransitionGroup name="pagePosts__list" tag="div">
         <custom-loader v-if="isPostsLoading" />
-        <post-list v-bind:posts="sortedPosts" @remove="removePost" v-else />
-      </div>
+        <post-list 
+          v-bind:posts="sortedPosts" 
+          @remove="removePost" 
+          v-else
+        />
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -42,7 +46,7 @@ export default {
     return {
       posts: [],
       isModalVisible: false,
-      isPostsLoading: false,
+      isPostsLoading: true,
       selectedSort: "",
       sortOptions: [
         { name: "By title", value: "title" },
@@ -128,5 +132,15 @@ html {
   gap: 20px;
 
   margin-bottom: 20px;
+}
+
+.pagePosts__list-enter-active,
+.pagePosts__list-leave-active {
+  transition: all 0.5s ease;
+}
+.pagePosts__list-enter-from,
+.pagePosts__list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>
