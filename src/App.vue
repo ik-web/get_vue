@@ -24,13 +24,13 @@
         <post-form @create="createPost" />
       </custom-modal>
 
-      <div class="pagePosts__pagination">
+      <!-- <div class="pagePosts__pagination">
         <custom-pagination
           :totalPages="totalPages"
           :page="page"
           @update="changePage"
         />
-      </div>
+      </div> -->
 
       <div class="pagePosts__list">
         <TransitionGroup name="pagePosts__list" tag="div">
@@ -42,6 +42,8 @@
           />
         </TransitionGroup>
       </div>
+
+      <div ref="observer" class="observer"></div>
     </div>
   </div>
 </template>
@@ -72,11 +74,6 @@ export default {
       ],
     };
   },
-  // watch: {
-  //   selectedSort(newValue) {
-  //     this.posts.sort((a,b)=> a[newValue]?.localeCompare(b[newValue]))
-  //   }
-  // },
   computed: {
     sortedPosts() {
       return [...this.posts].sort((a, b) =>
@@ -94,12 +91,15 @@ export default {
       this.posts.push(post);
       this.isModalVisible = false;
     },
+
     removePost(post) {
       this.posts = this.posts.filter((p) => p.id !== post.id);
     },
+
     showModal() {
       this.isModalVisible = true;
     },
+
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
@@ -124,17 +124,58 @@ export default {
         this.isPostsLoading = false;
       }
     },
-    changePage(page) {
-      this.page = page;
+
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
+        );
+
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
+        );
+
+        this.posts = [...this.posts, ...response.data];
+      } catch (error) {
+        alert(error);
+      }
     },
+    // changePage(page) {
+    //   this.page = page;
+    // },
   },
+
   mounted() {
     this.fetchPosts();
+
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const handleIntersect = (...args) => {
+      if (args[0][0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts();
+        console.log('posts is loaded');
+      }
+    }
+
+    const observer = new IntersectionObserver(handleIntersect, options);
+    observer.observe(this.$refs.observer);
   },
+
   watch: {
-    page() {
-      this.fetchPosts();
-    },
+    // page() {
+    //   this.fetchPosts();
+    // },
   },
 };
 </script>
@@ -153,7 +194,7 @@ html {
 .container {
   max-width: 830px;
   width: 100%;
-  padding: 0 15px 40px;
+  padding: 0 15px 0;
   margin: 0 auto;
 }
 
@@ -195,5 +236,10 @@ html {
 .pagePosts__list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+.observer {
+  height: 40px;
+  background: teal;
 }
 </style>
