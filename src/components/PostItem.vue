@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <div>
-      <div>{{ post.id }}</div>
+      <h4 class="post__number">№{{ post.id }}</h4>
       <div class="post__title"><strong>Title:</strong> {{ post.title }}</div>
       <div class="post__body">
         <strong>Description:</strong> {{ post.body }}
@@ -35,6 +35,11 @@ export default {
   border: 4px double teal;
   padding: 16px;
 }
+
+.post__number {
+  margin-bottom: 12px;
+}
+
 .post__title {
   margin-bottom: 12px;
 }
