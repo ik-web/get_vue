@@ -12,7 +12,9 @@ export default {
 
 <style scoped>
   .loader {
-    margin-top: 60px;
-    text-align: center;
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 </style>

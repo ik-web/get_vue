@@ -8,7 +8,7 @@
         </div>
 
         <div class="pagePosts__searchField">
-          <custom-input v-model="searchQuery" placeholder="Search a post..."/>
+          <custom-input v-model="searchQuery" placeholder="Search a post..." />
         </div>
 
         <div class="pagePosts__select">
@@ -24,14 +24,24 @@
         <post-form @create="createPost" />
       </custom-modal>
 
-      <TransitionGroup name="pagePosts__list" tag="div">
-        <custom-loader v-if="isPostsLoading" />
-        <post-list 
-          v-bind:posts="SortedAndSearchedPosts" 
-          @remove="removePost" 
-          v-else
+      <div class="pagePosts__pagination">
+        <custom-pagination
+          :totalPages="totalPages"
+          :page="page"
+          @update="changePage"
         />
-      </TransitionGroup>
+      </div>
+
+      <div class="pagePosts__list">
+        <TransitionGroup name="pagePosts__list" tag="div">
+          <custom-loader v-if="isPostsLoading" />
+          <post-list
+            v-bind:posts="SortedAndSearchedPosts"
+            @remove="removePost"
+            v-else
+          />
+        </TransitionGroup>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +63,9 @@ export default {
       isPostsLoading: true,
       selectedSort: "",
       searchQuery: "",
+      page: 1,
+      limit: 8,
+      totalPages: 0,
       sortOptions: [
         { name: "By title", value: "title" },
         { name: "By description", value: "body" },
@@ -71,11 +84,10 @@ export default {
       );
     },
     SortedAndSearchedPosts() {
-      return this.sortedPosts
-      .filter(post => (
+      return this.sortedPosts.filter((post) =>
         post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-      ));
-    }
+      );
+    },
   },
   methods: {
     createPost(post) {
@@ -91,9 +103,20 @@ export default {
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
+
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+          "https://jsonplaceholder.typicode.com/posts?",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
         );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
+        );
+
         this.posts = response.data;
       } catch (error) {
         alert(error);
@@ -101,9 +124,17 @@ export default {
         this.isPostsLoading = false;
       }
     },
+    changePage(page) {
+      this.page = page;
+    },
   },
   mounted() {
     this.fetchPosts();
+  },
+  watch: {
+    page() {
+      this.fetchPosts();
+    },
   },
 };
 </script>
@@ -122,7 +153,7 @@ html {
 .container {
   max-width: 830px;
   width: 100%;
-  padding: 0 15px;
+  padding: 0 15px 40px;
   margin: 0 auto;
 }
 
@@ -144,6 +175,16 @@ html {
   gap: 20px;
 
   margin-bottom: 20px;
+}
+
+.pagePosts__pagination {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.pagePosts__list {
+  position: relative;
 }
 
 .pagePosts__list-enter-active,

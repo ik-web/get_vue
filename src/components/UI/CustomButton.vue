@@ -13,6 +13,7 @@ export default {
 <style scoped>
 .button {
   width: 100%;
+  min-width: 40px;
   height: 40px;
   padding: 0 12px;
 
@@ -27,7 +28,7 @@ export default {
 
 .button:hover,
 .button:focus {
-  background: #00a5a5;
-  border-color: #00a5a5;
+  background: cyan;
+  border-color: cyan;
 }
 </style>
