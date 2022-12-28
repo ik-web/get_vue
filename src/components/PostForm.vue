@@ -6,6 +6,7 @@
       type="text"
       placeholder="Post title"
       v-model.trim="post.title"
+      v-focus
     />
 
     <custom-input

@@ -1,30 +1,33 @@
 <template>
-
-    <div class="pagePosts">
-      <h1 class="pagePosts__title">The page with some posts</h1>
-      <div class="pagePosts__top">
-        <div class="pagePosts__button">
-          <custom-button @click="showModal">Add new post</custom-button>
-        </div>
-
-        <div class="pagePosts__searchField">
-          <custom-input v-model="searchQuery" placeholder="Search a post..." />
-        </div>
-
-        <div class="pagePosts__select">
-          <custom-select
-            v-model="selectedSort"
-            defaultOptionName="Select a sort method"
-            :options="sortOptions"
-          />
-        </div>
+  <div class="pagePosts">
+    <h1 class="pagePosts__title">The page with some posts</h1>
+    <div class="pagePosts__top">
+      <div class="pagePosts__button">
+        <custom-button @click="showModal">Add new post</custom-button>
       </div>
 
-      <custom-modal v-model:show="isModalVisible">
-        <post-form @create="createPost" />
-      </custom-modal>
+      <div class="pagePosts__searchField">
+        <custom-input
+          v-model="searchQuery"
+          placeholder="Search a post..."
+          v-focus
+        />
+      </div>
 
-      <!-- <div class="pagePosts__pagination">
+      <div class="pagePosts__select">
+        <custom-select
+          v-model="selectedSort"
+          defaultOptionName="Select a sort method"
+          :options="sortOptions"
+        />
+      </div>
+    </div>
+
+    <custom-modal v-model:show="isModalVisible">
+      <post-form @create="createPost" />
+    </custom-modal>
+
+    <!-- <div class="pagePosts__pagination">
         <custom-pagination
           :totalPages="totalPages"
           :page="page"
@@ -32,19 +35,19 @@
         />
       </div> -->
 
-      <div class="pagePosts__list">
-        <TransitionGroup name="pagePosts__list" tag="div">
-          <custom-loader v-if="isPostsLoading" />
-          <post-list
-            v-bind:posts="SortedAndSearchedPosts"
-            @remove="removePost"
-            v-else
-          />
-        </TransitionGroup>
-      </div>
-
-      <div ref="observer" class="observer"></div>
+    <div class="pagePosts__list">
+      <TransitionGroup name="pagePosts__list" tag="div">
+        <custom-loader v-if="isPostsLoading" />
+        <post-list
+          v-bind:posts="SortedAndSearchedPosts"
+          @remove="removePost"
+          v-else
+        />
+      </TransitionGroup>
     </div>
+
+    <div v-intersection="loadMorePosts" class="observer"></div>
+  </div>
 </template>
 
 <script>
@@ -155,26 +158,19 @@ export default {
   mounted() {
     this.fetchPosts();
 
-    const options = {
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
+    // const options = {
+    //   rootMargin: "0px",
+    //   threshold: 1.0,
+    // };
 
-    const handleIntersect = (...args) => {
-      if (args[0][0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts();
-        console.log('posts is loaded');
-      }
-    }
+    // const handleIntersect = (...args) => {
+    //   if (args[0][0].isIntersecting && this.page < this.totalPages) {
+    //     this.loadMorePosts();
+    //   }
+    // }
 
-    const observer = new IntersectionObserver(handleIntersect, options);
-    observer.observe(this.$refs.observer);
-  },
-
-  watch: {
-    // page() {
-    //   this.fetchPosts();
-    // },
+    // const observer = new IntersectionObserver(handleIntersect, options);
+    // observer.observe(this.$refs.observer);
   },
 };
 </script>
