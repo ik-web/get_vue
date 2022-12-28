@@ -8,7 +8,8 @@
       </div>
     </div>
 
-    <div>
+    <div class="post__buttons">
+      <custom-button @click="$router.push(`/posts/${post.id}`)">View</custom-button>
       <custom-button @click="$emit('remove', post)">Delete</custom-button>
     </div>
   </div>
@@ -42,5 +43,11 @@ export default {
 
 .post__title {
   margin-bottom: 12px;
+}
+
+.post__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 </style>

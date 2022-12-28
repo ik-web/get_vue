@@ -4,6 +4,7 @@ import Home from '@/pages/Home.vue';
 import About from '@/pages/About.vue';
 import Users from '@/pages/Users.vue';
 import Posts from '@/pages/Posts.vue';
+import Post from '@/pages/Post.vue';
 
 const routes = [
   {
@@ -22,6 +23,10 @@ const routes = [
   {
     path: '/posts',
     component: Posts
+  },
+  {
+    path: '/posts/:id',
+    component: Post
   }
 ];
 
